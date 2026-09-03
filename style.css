@@ -1,0 +1,173 @@
+:root{
+  --bg:#151a2b;
+  --panel:#1c2340;
+  --panel-2:#232c4f;
+  --line:#313c69;
+  --text:#dfe5f7;
+  --muted:#8e99c0;
+  --teal:#5ad1c4;
+  --amber:#f2a154;
+  --rose:#e0709f;
+  --radius:6px;
+  --rail-w:296px;
+}
+
+*{box-sizing:border-box}
+
+html,body{height:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:"Space Grotesk",system-ui,sans-serif;
+  font-size:14px;
+  line-height:1.45;
+  display:grid;
+  grid-template-rows:auto minmax(0,1fr);
+  overflow:hidden;
+}
+.num{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+/* ---------- topbar ---------- */
+.topbar{
+  display:flex;align-items:center;gap:24px;
+  padding:10px 18px;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,#1b2239,#171d31);
+}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand-mark{
+  width:16px;height:16px;flex:none;border-radius:50%;
+  background:radial-gradient(circle at 32% 32%,var(--teal),#2b6f8f 55%,#20305c 100%);
+  box-shadow:0 0 0 3px rgba(90,209,196,.14);
+}
+.brand-text{font-weight:600;letter-spacing:.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+.tabs{display:flex;gap:4px;margin-left:auto}
+.tab{
+  font:inherit;color:var(--muted);background:transparent;
+  border:1px solid transparent;border-radius:var(--radius);
+  padding:7px 14px;cursor:pointer;
+}
+.tab:hover{color:var(--text);background:rgba(255,255,255,.04)}
+.tab.is-active{color:#0f1426;background:var(--teal);border-color:var(--teal);font-weight:500}
+.tab:focus-visible,.btn:focus-visible,.seg-btn:focus-visible,input:focus-visible{
+  outline:2px solid var(--amber);outline-offset:2px;
+}
+
+.meter{display:flex;align-items:baseline;gap:6px;padding-left:10px;border-left:1px solid var(--line)}
+.meter-label{color:var(--muted);font-size:12px}
+.meter-value{font-size:15px;color:var(--amber);min-width:32px;text-align:right}
+
+/* ---------- module shell ---------- */
+main{min-height:0;position:relative}
+.module{
+  position:absolute;inset:0;
+  display:grid;grid-template-columns:var(--rail-w) minmax(0,1fr);
+}
+.module[hidden]{display:none}
+
+.rail{
+  border-right:1px solid var(--line);
+  background:var(--panel);
+  overflow-y:auto;
+  padding:4px 0 28px;
+}
+.group{padding:16px 16px 18px;border-bottom:1px solid var(--line)}
+.group:last-child{border-bottom:0}
+.group h2{
+  margin:0 0 12px;font-size:12.5px;font-weight:500;color:var(--muted);
+}
+.note{margin:10px 0 0;font-size:12px;color:var(--muted)}
+
+/* ---------- controls ---------- */
+.ctl{margin-bottom:12px}
+.ctl label{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;margin-bottom:5px}
+.ctl output{color:var(--teal);font-size:12.5px}
+input[type=range]{
+  width:100%;height:18px;margin:0;background:transparent;accent-color:var(--teal);cursor:pointer;
+}
+.check{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;margin:8px 0;color:var(--text);cursor:pointer}
+.check input{accent-color:var(--teal);margin-top:2px;flex:none}
+
+.seg{display:flex;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.seg-btn{
+  flex:1;font:inherit;font-size:12.5px;color:var(--muted);
+  background:var(--panel-2);border:0;border-right:1px solid var(--line);
+  padding:7px 4px;cursor:pointer;
+}
+.seg-btn:last-child{border-right:0}
+.seg-btn:hover{color:var(--text)}
+.seg-btn.is-on{background:var(--teal);color:#0f1426;font-weight:500}
+
+.btn{
+  font:inherit;font-size:12.5px;color:var(--text);
+  background:var(--panel-2);border:1px solid var(--line);border-radius:var(--radius);
+  padding:8px 12px;cursor:pointer;width:100%;
+}
+.btn:hover{border-color:var(--teal);color:var(--teal)}
+.btn.is-on{background:var(--amber);border-color:var(--amber);color:#1a1206}
+.btn-row{display:flex;gap:8px;margin:10px 0 8px}
+
+/* ---------- readouts ---------- */
+.readout{
+  display:grid;grid-template-columns:auto minmax(0,1fr);
+  gap:4px 12px;margin:0 0 12px;font-size:12.5px;
+}
+.readout dt{color:var(--muted)}
+.readout dd{margin:0;text-align:right;color:var(--text);overflow-wrap:anywhere}
+
+.coef{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:12px}
+.coef th{
+  text-align:right;font-weight:400;color:var(--muted);
+  padding:2px 0 6px;border-bottom:1px solid var(--line);
+}
+.coef th:first-child,.coef td:first-child{text-align:left}
+.coef td{
+  padding:3px 0;text-align:right;
+  font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;
+}
+.muted{color:var(--muted);font-family:inherit;text-align:left!important}
+
+.minichart{
+  width:100%;height:64px;display:block;
+  background:#141a2e;border:1px solid var(--line);border-radius:var(--radius);
+}
+
+/* ---------- stage ---------- */
+.stage{
+  min-width:0;min-height:0;position:relative;
+  display:grid;grid-template-rows:minmax(0,1fr) auto;
+  background:
+    linear-gradient(rgba(49,60,105,.30) 1px,transparent 1px) 0 0/100% 40px,
+    linear-gradient(90deg,rgba(49,60,105,.30) 1px,transparent 1px) 0 0/40px 100%,
+    #101524;
+}
+.stage-split{grid-template-rows:minmax(0,1fr) 148px}
+.canvas-wrap{position:relative;min-height:0;min-width:0}
+.canvas-wrap canvas{display:block;width:100%;height:100%}
+.spectrum{border-top:1px solid var(--line);background:#131828}
+.canvas-tag{
+  position:absolute;left:10px;top:8px;font-size:11px;color:var(--muted);pointer-events:none;
+}
+.hint{
+  margin:0;padding:7px 14px;font-size:11.5px;color:var(--muted);
+  border-top:1px solid var(--line);background:rgba(21,26,43,.75);
+}
+#fractal-canvas{cursor:grab}
+#fractal-canvas.is-drag{cursor:grabbing}
+#lorenz-canvas{cursor:grab}
+#fourier-canvas.is-draw{cursor:crosshair}
+
+/* ---------- responsive ---------- */
+@media (max-width:900px){
+  body{overflow:auto}
+  .topbar{flex-wrap:wrap;gap:12px}
+  .tabs{margin-left:0;width:100%;overflow-x:auto}
+  main{position:static}
+  .module{position:static;grid-template-columns:1fr}
+  .module[hidden]{display:none}
+  .rail{border-right:0;border-bottom:1px solid var(--line);max-height:none;overflow:visible}
+  .stage{height:70vh}
+  .stage-split{height:80vh}
+}

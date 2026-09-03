@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Multi-System Mathematical Visualizer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <span class="brand-text">Multi-System Mathematical Visualizer</span>
+  </div>
+
+  <nav class="tabs" role="tablist" aria-label="Modul">
+    <button class="tab is-active" role="tab" aria-selected="true" aria-controls="mod-fractal" id="tab-fractal">Fraktal kompleks</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="mod-lorenz" id="tab-lorenz">Lorenz attractor</button>
+    <button class="tab" role="tab" aria-selected="false" aria-controls="mod-fourier" id="tab-fourier">Fourier epicycle</button>
+  </nav>
+
+  <div class="meter" title="Frame per detik">
+    <span class="meter-label">fps</span>
+    <span class="meter-value num" id="fps">–</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- ==================== MODUL 1: FRAKTAL ==================== -->
+  <section class="module is-active" id="mod-fractal" role="tabpanel" aria-labelledby="tab-fractal">
+    <aside class="rail">
+      <div class="group">
+        <h2>Himpunan</h2>
+        <div class="seg" role="group">
+          <button class="seg-btn is-on" data-fmode="mandelbrot">Mandelbrot</button>
+          <button class="seg-btn" data-fmode="julia">Julia</button>
+        </div>
+        <p class="note">Iterasi z<sub>n+1</sub> = z<sub>n</sub>² + c, escape-time, pewarnaan kontinu.</p>
+      </div>
+
+      <div class="group" id="julia-group" hidden>
+        <h2>Konstanta c</h2>
+        <div class="ctl">
+          <label for="f-jre">Re(c) <output class="num" id="f-jre-v">-0.750</output></label>
+          <input type="range" id="f-jre" min="-2" max="2" step="0.001" value="-0.75">
+        </div>
+        <div class="ctl">
+          <label for="f-jim">Im(c) <output class="num" id="f-jim-v">0.110</output></label>
+          <input type="range" id="f-jim" min="-2" max="2" step="0.001" value="0.11">
+        </div>
+        <label class="check"><input type="checkbox" id="f-animc"> Putar c pada lingkaran</label>
+      </div>
+
+      <div class="group">
+        <h2>Iterasi &amp; warna</h2>
+        <label class="check"><input type="checkbox" id="f-autoiter" checked> Iterasi mengikuti kedalaman zoom</label>
+        <div class="ctl">
+          <label for="f-iter">Iterasi maksimum <output class="num" id="f-iter-v">400</output></label>
+          <input type="range" id="f-iter" min="60" max="6000" step="20" value="400">
+        </div>
+        <div class="ctl">
+          <label for="f-cycle">Rapat pita warna <output class="num" id="f-cycle-v">0.035</output></label>
+          <input type="range" id="f-cycle" min="0.004" max="0.2" step="0.002" value="0.035">
+        </div>
+        <div class="ctl">
+          <label for="f-shift">Geser warna <output class="num" id="f-shift-v">0.00</output></label>
+          <input type="range" id="f-shift" min="0" max="1" step="0.01" value="0">
+        </div>
+        <div class="seg" role="group">
+          <button class="seg-btn is-on" data-pal="0">Kobalt</button>
+          <button class="seg-btn" data-pal="1">Tembaga</button>
+          <button class="seg-btn" data-pal="2">Spektrum</button>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2>Pembacaan</h2>
+        <dl class="readout">
+          <dt>Re di kursor</dt><dd class="num" id="f-re">–</dd>
+          <dt>Im di kursor</dt><dd class="num" id="f-im">–</dd>
+          <dt>Zoom</dt><dd class="num" id="f-zoom">1.0×</dd>
+          <dt>Lebar piksel</dt><dd class="num" id="f-pix">–</dd>
+          <dt>Aritmetika</dt><dd class="num" id="f-arith">double</dd>
+          <dt>Waktu render</dt><dd class="num" id="f-ms">–</dd>
+        </dl>
+        <button class="btn" id="f-reset">Kembali ke tampilan awal</button>
+      </div>
+    </aside>
+
+    <div class="stage">
+      <div class="canvas-wrap"><canvas id="fractal-canvas"></canvas></div>
+      <p class="hint">Scroll untuk zoom di posisi kursor · seret untuk menggeser · zoom &gt; 10¹⁰ berpindah ke aritmetika double-double + perturbasi</p>
+    </div>
+  </section>
+
+  <!-- ==================== MODUL 2: LORENZ ==================== -->
+  <section class="module" id="mod-lorenz" role="tabpanel" aria-labelledby="tab-lorenz" hidden>
+    <aside class="rail">
+      <div class="group">
+        <h2>Parameter sistem</h2>
+        <div class="ctl">
+          <label for="l-sigma">σ sigma <output class="num" id="l-sigma-v">10.00</output></label>
+          <input type="range" id="l-sigma" min="0" max="25" step="0.01" value="10">
+        </div>
+        <div class="ctl">
+          <label for="l-rho">ρ rho <output class="num" id="l-rho-v">28.00</output></label>
+          <input type="range" id="l-rho" min="0" max="80" step="0.01" value="28">
+        </div>
+        <div class="ctl">
+          <label for="l-beta">β beta <output class="num" id="l-beta-v">2.667</output></label>
+          <input type="range" id="l-beta" min="0.1" max="10" step="0.001" value="2.667">
+        </div>
+        <button class="btn" id="l-preset">Nilai klasik (10, 28, 8/3)</button>
+      </div>
+
+      <div class="group">
+        <h2>Integrator RK4</h2>
+        <div class="ctl">
+          <label for="l-dt">Langkah waktu dt <output class="num" id="l-dt-v">0.005</output></label>
+          <input type="range" id="l-dt" min="0.001" max="0.02" step="0.001" value="0.005">
+        </div>
+        <div class="ctl">
+          <label for="l-speed">Langkah per frame <output class="num" id="l-speed-v">8</output></label>
+          <input type="range" id="l-speed" min="1" max="30" step="1" value="8">
+        </div>
+        <div class="ctl">
+          <label for="l-trail">Panjang jejak <output class="num" id="l-trail-v">3000</output></label>
+          <input type="range" id="l-trail" min="200" max="8000" step="100" value="3000">
+        </div>
+      </div>
+
+      <div class="group">
+        <h2>Sensitivitas kondisi awal</h2>
+        <label class="check"><input type="checkbox" id="l-twin" checked> Jalankan trajektori kembar (selisih awal 10⁻⁵)</label>
+        <canvas id="l-diverge" class="minichart"></canvas>
+        <p class="note">Sumbu tegak: log₁₀ jarak antar trajektori. Garis naik lurus = divergensi eksponensial.</p>
+      </div>
+
+      <div class="group">
+        <h2>Pembacaan</h2>
+        <dl class="readout">
+          <dt>x</dt><dd class="num" id="l-x">–</dd>
+          <dt>y</dt><dd class="num" id="l-y">–</dd>
+          <dt>z</dt><dd class="num" id="l-z">–</dd>
+          <dt>t</dt><dd class="num" id="l-t">–</dd>
+          <dt>Jarak kembar</dt><dd class="num" id="l-sep">–</dd>
+        </dl>
+        <div class="btn-row">
+          <button class="btn" id="l-pause">Jeda</button>
+          <button class="btn" id="l-reset">Ulang dari awal</button>
+        </div>
+        <label class="check"><input type="checkbox" id="l-spin" checked> Rotasi otomatis</label>
+      </div>
+    </aside>
+
+    <div class="stage">
+      <div class="canvas-wrap"><canvas id="lorenz-canvas"></canvas></div>
+      <p class="hint">Seret untuk memutar kamera · scroll untuk zoom · proyeksi perspektif dihitung manual dari matriks rotasi</p>
+    </div>
+  </section>
+
+  <!-- ==================== MODUL 3: FOURIER ==================== -->
+  <section class="module" id="mod-fourier" role="tabpanel" aria-labelledby="tab-fourier" hidden>
+    <aside class="rail">
+      <div class="group">
+        <h2>Bentuk sumber</h2>
+        <div class="btn-row">
+          <button class="btn" id="u-draw">Gambar sendiri</button>
+          <button class="btn" id="u-square">Gelombang kotak</button>
+        </div>
+        <p class="note" id="u-status">Klik “Gambar sendiri”, lalu seret satu goresan di kanvas.</p>
+      </div>
+
+      <div class="group">
+        <h2>Transformasi</h2>
+        <div class="ctl">
+          <label for="u-n">Jumlah sampel N <output class="num" id="u-n-v">200</output></label>
+          <input type="range" id="u-n" min="32" max="512" step="8" value="200">
+        </div>
+        <div class="ctl">
+          <label for="u-harm">Harmonik dipakai <output class="num" id="u-harm-v">200</output></label>
+          <input type="range" id="u-harm" min="1" max="512" step="1" value="200">
+        </div>
+        <div class="ctl">
+          <label for="u-speed">Kecepatan animasi <output class="num" id="u-speed-v">1.0×</output></label>
+          <input type="range" id="u-speed" min="0.1" max="4" step="0.1" value="1">
+        </div>
+        <label class="check"><input type="checkbox" id="u-circles" checked> Tampilkan lingkaran epicycle</label>
+        <label class="check"><input type="checkbox" id="u-orig" checked> Tampilkan bentuk asli</label>
+      </div>
+
+      <div class="group">
+        <h2>Koefisien dominan</h2>
+        <table class="coef">
+          <thead><tr><th>k</th><th>|X<sub>k</sub>|</th><th>φ</th></tr></thead>
+          <tbody id="u-coef"><tr><td colspan="3" class="muted">belum ada data</td></tr></tbody>
+        </table>
+        <dl class="readout">
+          <dt>Waktu DFT</dt><dd class="num" id="u-ms">–</dd>
+          <dt>Fase t</dt><dd class="num" id="u-t">–</dd>
+        </dl>
+      </div>
+    </aside>
+
+    <div class="stage stage-split">
+      <div class="canvas-wrap"><canvas id="fourier-canvas"></canvas></div>
+      <div class="canvas-wrap spectrum"><canvas id="spectrum-canvas"></canvas>
+        <span class="canvas-tag">magnitudo vs frekuensi</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
